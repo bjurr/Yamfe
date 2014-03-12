@@ -1,0 +1,32 @@
+[
+    {
+        "id" : "stage",
+        "name" : "stage",
+        "type" : "ClutterStage",
+        "background-color" : "black",
+        "width" : 1366.0,
+        "height" : 768.0,
+        "user-resizable" : false,
+        "children" : [
+            {
+                "id" : "splash_screen",
+                "name" : "splash_screen",
+                "type" : "YamfeSplashScreen",
+                "ui-script" : "data/splash.json",
+                "timeout" : 4000
+            },
+            {
+                "id" : "test_screen",
+                "name" : "test_screen",
+                "type" : "YamfeScreen",
+                "ui-script" : "data/screen.json"
+            },
+            {
+                "id" : "selection_screen",
+                "name" : "selection_screen",
+                "type" : "YamfeSelectionScreen",
+                "ui-script" : "data/selection.json"
+            }
+        ]
+    }
+]

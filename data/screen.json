@@ -1,0 +1,52 @@
+[
+  {
+    "id" : "screen",
+    "name" : "screen",
+    "type" : "ClutterActor",
+    "width": 1366,
+    "height": 768,
+    "x" : 0,
+    "y" : 0,
+    "background-color" : "green",
+    "children" : [
+      {
+        "id" : "atest",
+        "name" : "atest",
+        "type" : "ClutterActor",
+        "x" : 30,
+        "y" : 30,
+        "width" : 200,
+        "height" : 200,
+        "background-color" : "yellow"
+      }
+    ]
+  },
+  {
+    "id" : "enter-anim",
+    "type" : "ClutterPropertyTransition",
+    "property-name" : "rotation-angle-z",
+    "animatable" : "atest",
+    "duration" : 5000,
+    "interval" : {
+      "id" : "enter-interval",
+      "type" : "ClutterInterval",
+      "value-type" : "gdouble",
+      "initial" : 0.0,
+      "final" : 360.0
+    }
+  },
+  {
+    "id" : "leave-anim",
+    "type" : "ClutterPropertyTransition",
+    "property-name" : "x",
+    "animatable" : "atest",
+    "duration" : 5000,
+    "interval" : {
+      "id" : "leave-interval",
+      "type" : "ClutterInterval",
+      "value-type" : "gdouble",
+      "initial" : 600.0,
+      "final" : 30.0
+    }
+  }
+]

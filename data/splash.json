@@ -1,0 +1,58 @@
+[
+    {
+        "id" : "screen",
+        "name" : "screen",
+        "type" : "ClutterActor",
+        "background-color" : "blue",
+        "x" : 0.0,
+        "y" : 0.0,
+        "width" : 1366.0,
+        "height" : 768.0,
+        "layout-manager" : {
+            "id" : "splash_layout",
+            "type" : "ClutterBinLayout"
+        },
+        "children" : [
+            {
+                "id" : "welcome_text",
+                "name" : "welcome_text",
+                "type" : "ClutterText",
+                "text" : "Welcome"
+            }
+        ]
+    },
+    {
+        "id" : "enter-anim",
+        "type" : "ClutterPropertyTransition",
+        "property-name" : "opacity",
+        "animatable" : {
+            "id" : "welcome_text",
+            "type" : "ClutterText"
+        },
+        "duration" : 2500,
+        "interval" : {
+            "id" : "enter-interval",
+            "type" : "ClutterInterval",
+            "value-type" : "guint",
+            "initial" : 0,
+            "final" : 255
+        }
+    },
+    {
+        "id" : "leave-anim",
+        "type" : "ClutterPropertyTransition",
+        "property-name" : "opacity",
+        "animatable" : {
+            "id" : "welcome_text",
+            "type" : "ClutterText"
+        },
+        "duration" : 2500,
+        "interval" : {
+            "id" : "leave-interval",
+            "type" : "ClutterInterval",
+            "value-type" : "guint",
+            "initial" : 255,
+            "final" : 0
+        }
+    }
+]

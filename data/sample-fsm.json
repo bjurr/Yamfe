@@ -1,0 +1,64 @@
+{
+    "name" : "run",
+    "enter" : [ "run_enter", "init" ],
+    "leave" : [ "run_leave" ],
+    "events" : [
+        [ "button-pressed", "on_button_pressed", "can_i_press", "blend" ],
+        [ "transient", "auto_pilot", "is_all_set", "swirl"]
+    ]
+    "substates" : [
+        {
+            "state" : "blend",
+            "enter" : "blend_enter",
+            "leave" : "blend_leave",
+            "children" : [
+                {
+                    "name" : "chop",
+                    ...
+                },
+                {
+                    "name" : "swirl",
+                    ...
+                }
+            ]
+        }
+    ]
+}
+
+
+<state name="run">
+    <enter action="run_enter" >
+        <block action="init" >
+    </enter>
+    <leave action="run_leave" />
+    <rule event="button-pressed" action="on_button_pressed" condition="can_i_press" newstate="blend" />
+    <rule event="transient" action="auto_pilot" condition="is_all_set" newstate="swirl" flag="EF_TRANSIENT" />
+    
+    <state name="blend" flag="SF_DEFAULT">
+        <enter action="blend_enter" />
+        <leave action="blend_leave" />
+
+        <state name="chop" flag="SF_DEFAULT">
+        </state>
+
+        <state name="swirl" flag="SF_DEFAULT">
+        </state>
+    </state>
+</state>
+
+        <rule event="karaoke-switch-fade-touched" newstate="KARAOKE SWITCH AWARE" flag="EF_FULL_HISTORY|EF_NIN" />
+    <rule event="karaoke-switch-no" newstate="KARAOKE SWITCH AWARE" flag="EF_FULL_HISTORY|EF_NIN" />
+    <rule event="karaoke-switch-yes" newstate="KARAOKE SWITCH YES" />
+    <rule event="remote-left-arrow" action="karaoke_switch_remote_left" newstate="KARAOKE SWITCH ASK" />
+    <rule event="remote-right-arrow" action="karaoke_switch_remote_right" newstate="KARAOKE SWITCH ASK" />
+                    <rule event="remote-ok" action="karaoke_switch_remote_ok" newstate="KARAOKE SWITCH ASK" />
+                    <rule event="ui-timeout" value="15000" newstate="KARAOKE SWITCH AWARE" flag="EF_FULL_HISTORY|EF_NIN|EF_TIMED" />
+                </state>
+
+                <state name="KARAOKE SWITCH YES">
+                    <rule event="goto juke" newstate="KARAOKE SWITCH DO IT" flag="EF_TRANSIENT" >
+                        <block action="leave_karaoke_kamikaze" />
+                        <block action="leave_karaoke_browse" />
+                    </rule>
+                    <rule event="goto karaoke" condition="is_not_karaoke_mode" newstate="KARAOKE SWITCH GOTO KARAOKE" flag="EF_TRANSIENT" />
+                </state>

@@ -1,0 +1,52 @@
+{
+    "id" : "screen",
+    "name" : "screen",
+    "type" : "ClutterActor",
+    "background-color" : "red",
+    "width" : 1366,
+    "height" : 768,
+    "children" : [
+        {
+            "id" : "sss",
+            "name" : "sss",
+            "type" : "ClutterActor",
+            "background-color" : "black",
+            "width" : 100,
+            "height" : 100
+        }
+    ]
+}
+{
+    "id" : "enter-anim",
+    "type" : "ClutterPropertyTransition",
+    "property-name" : "opacity",
+    "animatable" : {
+        "id" : "sss",
+        "type" : "ClutterActor"
+    },
+    "duration" : 2500,
+    "interval" : {
+        "id" : "enter-interval",
+        "type" : "ClutterInterval",
+        "value-type" : "guint",
+        "initial" : 0,
+        "final" : 255
+    }
+}
+{
+    "id" : "leave-anim",
+    "type" : "ClutterPropertyTransition",
+    "property-name" : "opacity",
+    "animatable" : {
+        "id" : "sss",
+        "type" : "ClutterActor"
+    },
+    "duration" : 2500,
+    "interval" : {
+        "id" : "leave-interval",
+        "type" : "ClutterInterval",
+        "value-type" : "guint",
+        "initial" : 255,
+        "final" : 0
+    }
+}
