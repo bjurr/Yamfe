@@ -1,7 +1,6 @@
 AC_PREREQ([2.65])
 AC_INIT([yamfe],[1.0],[dbureau@gmail.com])
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_FILES([Makefile
         src/Makefile])
