@@ -13,7 +13,7 @@
                 "name" : "splash_screen",
                 "type" : "YamfeSplashScreen",
                 "ui-script" : "data/splash.json",
-                "timeout" : 4000
+                "timeout" : 1000
             },
             {
                 "id" : "test_screen",

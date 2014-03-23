@@ -21,7 +21,9 @@ internal class Yamfe.Main : GLib.Object {
     private Input.InputType _input = 0;
 
     public int up { get; set; default = 0xff52; }
-    public string rompath { get; set; default = "./roms/"; }
+    public string rom_path { get; set; default = "./roms/"; }
+    public string mame_path { get; set; default = "./bin/mame"; }
+    public string mame_options { get; set; default = "./bin/mame"; }
 
     /**
      * Load up the json script, fetch the widgets and initialize the application.
@@ -65,6 +67,8 @@ internal class Yamfe.Main : GLib.Object {
     private int run() {
         this._current = this._splash;
 
+        // Wire the screen enter/leave. This will control the flow for now, but
+        // it will all make its way into an FSM eventually.
         this._splash.entered.connect(() => {
             message("Entered splash screen");
         });
@@ -83,6 +87,43 @@ internal class Yamfe.Main : GLib.Object {
         this._select.left.connect(() => {
             message("Left selection screen");
         });
+
+        (_select as Yamfe.SelectionScreen).selected.connect((name) => {
+            message("Game selected: %s", name);
+
+            // Spawn the actual Mame app.
+            try {
+                string[] mame_args = {"ls", "-l", "-h"};
+                string[] spawn_env = Environ.get ();
+                string mame_stdout;
+                string mame_stderr;
+                int mame_status;
+
+                Process.spawn_sync ("/",
+                                    mame_args,
+                                    spawn_env,
+                                    SpawnFlags.SEARCH_PATH,
+                                    null,
+                                    out mame_stdout,
+                                    out mame_stderr,
+                                    out mame_status);
+
+                // Print stdout/stderr for debugging purpose
+                stdout.printf ("stdout:\n");
+                stdout.puts (mame_stdout);
+
+                stdout.printf ("stderr:\n");
+                stdout.puts (mame_stderr);
+
+                stdout.printf ("Mame exit code: %d\n", mame_status);
+
+            } catch (SpawnError err) {
+                warning("Spawn did not work: %s", err.message);
+            }
+        });
+
+        // Set the rom path to load in the selection screen.
+        (_select as SelectionScreen).path = this.rom_path;
 
         this._stage.show();
         this._splash.enter();
@@ -115,6 +156,9 @@ internal class Yamfe.Main : GLib.Object {
             case Clutter.Key.Right:
                 this._input |= Yamfe.Input.InputType.RIGHT;
                 break;
+            case Clutter.Key.w:
+                this._input |= Yamfe.Input.InputType.SELECT;
+                break;
 			default:
 				break;
 		}
@@ -139,6 +183,9 @@ internal class Yamfe.Main : GLib.Object {
                 break;
             case Clutter.Key.Right:
                 this._input ^= Yamfe.Input.InputType.RIGHT;
+                break;
+            case Clutter.Key.w:
+                this._input ^= Yamfe.Input.InputType.SELECT;
                 break;
             default:
                 break;
@@ -176,10 +223,22 @@ internal class Yamfe.Main : GLib.Object {
 
         try {
             main.up = keyfile.get_integer ("YamfeKeyMap", "key_up");
-            main.rompath = keyfile.get_string ("YamfeGeneralSettings", "rom_path");
+            main.rom_path = keyfile.get_string ("YamfeGeneralSettings", "rom_path");
+            message("rom path: %s", main.rom_path);
+            main.mame_path = keyfile.get_string ("YamfeGeneralSettings", "mame_path");
+            message("mame path: %s", main.mame_path);
+            main.mame_options = keyfile.get_string ("YamfeGeneralSettings", "mame_options");
+            message("mame options: %s", main.mame_options);
         } catch (Error err) {
             error("Error while fetching config: %s", err.message);
         }
+        
+        Point p = Point.alloc();
+        p.init(25.0f, 54.0f);
+        message("point: %f : %f", p.x, p.y);
+        Point p2 = p.copy();
+        p2.y = 33.0f;
+        message("point2: %f : %f", p2.x, p2.y);
         
         main.run();
 

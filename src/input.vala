@@ -5,11 +5,8 @@ public interface Yamfe.Input : GLib.Object {
         DOWN,
         LEFT,
         RIGHT,
-        BUTTON_A,
-        BUTTON_B,
-        BUTTON_C,
-        BUTTON_D,
-        BUTTON_1
+        SELECT,
+        CANCEL
     }
 
     public abstract void input_event(InputType input);
