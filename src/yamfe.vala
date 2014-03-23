@@ -93,13 +93,14 @@ internal class Yamfe.Main : GLib.Object {
 
             // Spawn the actual Mame app.
             try {
-                string[] mame_args = {"ls", "-l", "-h"};
+                //string[] mame_args = {"./AUR/xmame-x11/pkg/usr/bin/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", "vigilntu"};
+                string[] mame_args = {"./AUR/xmame-x11/pkg/usr/bin/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", name};
                 string[] spawn_env = Environ.get ();
                 string mame_stdout;
                 string mame_stderr;
                 int mame_status;
-
-                Process.spawn_sync ("/",
+		//aoss ./AUR/xmame-x11/pkg/usr/bin/xmame.x11 -vidmod 1 -fullscreen -rp ~/roms -nocursor vigilntu
+                Process.spawn_sync ("/home/arcade",
                                     mame_args,
                                     spawn_env,
                                     SpawnFlags.SEARCH_PATH,

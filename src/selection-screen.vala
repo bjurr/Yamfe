@@ -25,7 +25,11 @@ class Yamfe.SelectionScreen : Screen ,Input {
     			entry.width = 600;
     			entry.background_color = Clutter.Color.get_static(Clutter.StaticColor.BLUE);
 
-    			Text t = new Text.full("Arial 20", file_info.get_name(), Clutter.Color.get_static(Clutter.StaticColor.WHITE));
+			string str = file_info.get_name();
+			int len = str.last_index_of(".zip");
+			string asd = str[0:len];
+			message("Name is: %s", asd);
+    			Text t = new Text.full("Arial 20", asd, Clutter.Color.get_static(Clutter.StaticColor.WHITE));
     			entry.add_child(t);
     			this._games_list.add_child(entry);
 	        }
@@ -94,15 +98,12 @@ class Yamfe.SelectionScreen : Screen ,Input {
 				break;
 
 			case Input.InputType.RIGHT:
-			Point p = Point.alloc();
-	    	message("Height: %f", this._games_list.height/2);
-	    	p.init(0, this._games_list.height/-2.0f);
-	    	message("P: %f : %f", p.x, p.y);
-	    	this._games_list.scroll_to_point(p);
 				break;
 
 			case Input.InputType.SELECT:
-				this.selected("Bubble Bobble");
+				Actor container = this._games_list.get_child_at_index(this._current_selection);
+				Text name = (Clutter.Text)container.get_first_child();
+				this.selected(name.get_text());
 				break;
 
 			default:
