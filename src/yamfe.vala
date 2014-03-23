@@ -22,7 +22,7 @@ internal class Yamfe.Main : GLib.Object {
 
     public int up { get; set; default = 0xff52; }
     public string rom_path { get; set; default = "./roms/"; }
-    public string mame_path { get; set; default = "./bin/mame"; }
+    public string mame_exec { get; set; default = "./bin/mame"; }
     public string mame_options { get; set; default = "./bin/mame"; }
 
     /**
@@ -93,13 +93,24 @@ internal class Yamfe.Main : GLib.Object {
 
             // Spawn the actual Mame app.
             try {
-                //string[] mame_args = {"./AUR/xmame-x11/pkg/usr/bin/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", "vigilntu"};
-                string[] mame_args = {"./AUR/xmame-x11/pkg/usr/bin/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", name};
+                //string[] mame_args = {"./xmame-x11/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", name};
+		string[] temp1 = this._mame_exec.split(" ");
+		string[] temp2 = this._mame_options.split(" ");
+                string[] mame_args = new string[temp1.length + temp2.length + 3];
+		for(int i=0;i<temp1.length;i++) {
+			mame_args[i] = temp1[i];
+		}                 
+		for(int i=0;i<temp2.length;i++) {
+			mame_args[i+temp1.length] = temp2[i];
+		}                
+
+		mame_args[temp1.length+temp2.length] = "-rp";
+		mame_args[temp1.length+temp2.length + 1] = this.rom_path;
+		mame_args[temp1.length+temp2.length + 2] = name;
                 string[] spawn_env = Environ.get ();
                 string mame_stdout;
                 string mame_stderr;
                 int mame_status;
-		//aoss ./AUR/xmame-x11/pkg/usr/bin/xmame.x11 -vidmod 1 -fullscreen -rp ~/roms -nocursor vigilntu
                 Process.spawn_sync ("/home/arcade",
                                     mame_args,
                                     spawn_env,
@@ -157,12 +168,16 @@ internal class Yamfe.Main : GLib.Object {
             case Clutter.Key.Right:
                 this._input |= Yamfe.Input.InputType.RIGHT;
                 break;
-            case Clutter.Key.w:
+            case Clutter.Key.Control_L:
                 this._input |= Yamfe.Input.InputType.SELECT;
                 break;
 			default:
 				break;
 		}
+// CLUTTER_KEY_Shift_L = blue
+// CLUTTER_KEY_Control_L = red
+// CLUTTER_KEY_Alt_L = yellow
+// CLUTTER_KEY_space = green
 
         // Send the event only to screens that implement the Yamfe.Input interface.
         if(this._current is Yamfe.Input) {
@@ -185,7 +200,7 @@ internal class Yamfe.Main : GLib.Object {
             case Clutter.Key.Right:
                 this._input ^= Yamfe.Input.InputType.RIGHT;
                 break;
-            case Clutter.Key.w:
+            case Clutter.Key.Control_L:
                 this._input ^= Yamfe.Input.InputType.SELECT;
                 break;
             default:
@@ -226,8 +241,8 @@ internal class Yamfe.Main : GLib.Object {
             main.up = keyfile.get_integer ("YamfeKeyMap", "key_up");
             main.rom_path = keyfile.get_string ("YamfeGeneralSettings", "rom_path");
             message("rom path: %s", main.rom_path);
-            main.mame_path = keyfile.get_string ("YamfeGeneralSettings", "mame_path");
-            message("mame path: %s", main.mame_path);
+            main.mame_exec = keyfile.get_string ("YamfeGeneralSettings", "mame_exec");
+            message("mame exec: %s", main.mame_exec);
             main.mame_options = keyfile.get_string ("YamfeGeneralSettings", "mame_options");
             message("mame options: %s", main.mame_options);
         } catch (Error err) {
