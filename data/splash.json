@@ -6,8 +6,8 @@
         "background-color" : "blue",
         "x" : 0.0,
         "y" : 0.0,
-        "width" : 1366.0,
-        "height" : 768.0,
+        "width" : 800.0,
+        "height" : 480.0,
         "layout-manager" : {
             "id" : "splash_layout",
             "type" : "ClutterBinLayout"
@@ -17,7 +17,7 @@
                 "id" : "welcome_text",
                 "name" : "welcome_text",
                 "type" : "ClutterText",
-                "text" : "Welcome"
+                "text" : "Yamfe!"
             }
         ]
     },
@@ -29,7 +29,7 @@
             "id" : "welcome_text",
             "type" : "ClutterText"
         },
-        "duration" : 2500,
+        "duration" : 1000,
         "interval" : {
             "id" : "enter-interval",
             "type" : "ClutterInterval",
@@ -46,7 +46,7 @@
             "id" : "welcome_text",
             "type" : "ClutterText"
         },
-        "duration" : 2500,
+        "duration" : 1000,
         "interval" : {
             "id" : "leave-interval",
             "type" : "ClutterInterval",

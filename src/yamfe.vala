@@ -61,6 +61,54 @@ internal class Yamfe.Main : GLib.Object {
         this._script.connect_signals(this._stage);
     }
 
+    private void spawn_mame(string name) {
+        message("Game selected: %s", name);
+
+        // Spawn the actual Mame app.
+        try {
+            //string[] mame_args = {"./xmame-x11/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", name};
+            string[] temp1 = this._mame_exec.split(" ");
+            string[] temp2 = this._mame_options.split(" ");
+            string[] mame_args = new string[temp1.length + temp2.length + 3];
+
+            for(int i=0;i<temp1.length;i++) {
+                mame_args[i] = temp1[i];
+            }                 
+            for(int i=0;i<temp2.length;i++) {
+                mame_args[i+temp1.length] = temp2[i];
+            }                
+
+            mame_args[temp1.length+temp2.length] = "-rp";
+            mame_args[temp1.length+temp2.length + 1] = this.rom_path;
+            mame_args[temp1.length+temp2.length + 2] = name;
+            string[] spawn_env = Environ.get ();
+            string mame_stdout;
+            string mame_stderr;
+            int mame_status;
+            
+            Process.spawn_sync (null,
+                                mame_args,
+                                spawn_env,
+                                SpawnFlags.SEARCH_PATH,
+                                null,
+                                out mame_stdout,
+                                out mame_stderr,
+                                out mame_status);
+
+            // Print stdout/stderr for debugging purpose
+            stdout.printf ("stdout:\n");
+            stdout.puts (mame_stdout);
+
+            stdout.printf ("stderr:\n");
+            stdout.puts (mame_stderr);
+
+            stdout.printf ("Mame exit code: %d\n", mame_status);
+
+        } catch (SpawnError err) {
+            warning("Spawn did not work: %s", err.message);
+        }
+    }
+
     /**
      * Everything is ready, let's start the application. This will fall in the Clutter main loop.
      */
@@ -88,51 +136,7 @@ internal class Yamfe.Main : GLib.Object {
             message("Left selection screen");
         });
 
-        (_select as Yamfe.SelectionScreen).selected.connect((name) => {
-            message("Game selected: %s", name);
-
-            // Spawn the actual Mame app.
-            try {
-                //string[] mame_args = {"./xmame-x11/xmame.x11", "-vidmod", "1", "-fullscreen", "-rp", "/home/arcade/roms", "-nocursor", name};
-		string[] temp1 = this._mame_exec.split(" ");
-		string[] temp2 = this._mame_options.split(" ");
-                string[] mame_args = new string[temp1.length + temp2.length + 3];
-		for(int i=0;i<temp1.length;i++) {
-			mame_args[i] = temp1[i];
-		}                 
-		for(int i=0;i<temp2.length;i++) {
-			mame_args[i+temp1.length] = temp2[i];
-		}                
-
-		mame_args[temp1.length+temp2.length] = "-rp";
-		mame_args[temp1.length+temp2.length + 1] = this.rom_path;
-		mame_args[temp1.length+temp2.length + 2] = name;
-                string[] spawn_env = Environ.get ();
-                string mame_stdout;
-                string mame_stderr;
-                int mame_status;
-                Process.spawn_sync ("/home/arcade",
-                                    mame_args,
-                                    spawn_env,
-                                    SpawnFlags.SEARCH_PATH,
-                                    null,
-                                    out mame_stdout,
-                                    out mame_stderr,
-                                    out mame_status);
-
-                // Print stdout/stderr for debugging purpose
-                stdout.printf ("stdout:\n");
-                stdout.puts (mame_stdout);
-
-                stdout.printf ("stderr:\n");
-                stdout.puts (mame_stderr);
-
-                stdout.printf ("Mame exit code: %d\n", mame_status);
-
-            } catch (SpawnError err) {
-                warning("Spawn did not work: %s", err.message);
-            }
-        });
+        (_select as Yamfe.SelectionScreen).selected.connect(spawn_mame);
 
         // Set the rom path to load in the selection screen.
         (_select as SelectionScreen).path = this.rom_path;
@@ -150,7 +154,7 @@ internal class Yamfe.Main : GLib.Object {
      * me to easily remap the keys later down the road.
      */
     private bool key_press_handler(Clutter.Actor actor, Clutter.KeyEvent event) {
-        message("keyval: %u hardware: %u unicode: %u", event.keyval, event.hardware_keycode, event.unicode_value);
+        //message("keyval: %u hardware: %u unicode: %u", event.keyval, event.hardware_keycode, event.unicode_value);
 
 		switch(event.keyval) {
 			case Clutter.Key.Escape:
@@ -248,13 +252,6 @@ internal class Yamfe.Main : GLib.Object {
         } catch (Error err) {
             error("Error while fetching config: %s", err.message);
         }
-        
-        Point p = Point.alloc();
-        p.init(25.0f, 54.0f);
-        message("point: %f : %f", p.x, p.y);
-        Point p2 = p.copy();
-        p2.y = 33.0f;
-        message("point2: %f : %f", p2.x, p2.y);
         
         main.run();
 

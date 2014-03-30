@@ -16,7 +16,9 @@ pkg_modules="clutter-1.0 >= 1.16.0
              gobject-2.0 >= 2.31.19
              gmodule-2.0 >= 2.31.19
              gdk-pixbuf-2.0 >= 2.30.4"
-PKG_CHECK_MODULES(YAMFE, [$pkg_modules])
+
+PKG_CHECK_MODULES([YAMFE], [$pkg_modules])
+
 AC_SUBST(YAMFE_CFLAGS)
 AC_SUBST(YAMFE_LIBS)
 

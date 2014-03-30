@@ -1,59 +1,62 @@
-{
-    "id" : "screen",
-    "name" : "screen",
-    "type" : "ClutterActor",
-    "background-color" : "red",
-    "width" : 1366,
-    "height" : 768,
-    "children" : [
-        {
-            "id" : "games-list",
-            "name" : "games-list",
-            "type" : "ClutterScrollActor",
-            "scroll-mode" : "vertically",
-            "width" : 800,
-            "height" : 600,
-            "background-color" : "yellow",
-            "layout-manager" : {
-                "id" : "list_layout",
-                "type" : "ClutterBoxLayout",
-                "orientation" : "vertical",
-                "spacing" : 10
+[
+    {
+        "id" : "screen",
+        "name" : "screen",
+        "type" : "ClutterActor",
+        "background-color" : "black",
+        "width" : 800,
+        "height" : 480,
+        "opacity" : 0,
+        "children" : [
+            {
+                "id" : "games-list",
+                "name" : "games-list",
+                "type" : "ClutterScrollActor",
+                "scroll-mode" : "vertically",
+                "width" : 800,
+                "height" : 480,
+                "background-color" : "yellow",
+                "layout-manager" : {
+                    "id" : "list_layout",
+                    "type" : "ClutterBoxLayout",
+                    "orientation" : "vertical",
+                    "spacing" : 10
+                }
             }
+        ]
+    },
+    {
+        "id" : "enter-anim",
+        "type" : "ClutterPropertyTransition",
+        "property-name" : "opacity",
+        "animatable" : {
+            "id" : "screen",
+            "type" : "ClutterActor"
+        },
+        "duration" : 500,
+        "interval" : {
+            "id" : "enter-interval",
+            "type" : "ClutterInterval",
+            "value-type" : "guint",
+            "initial" : 0,
+            "final" : 255
         }
-    ]
-}
-{
-    "id" : "enter-anim",
-    "type" : "ClutterPropertyTransition",
-    "property-name" : "opacity",
-    "animatable" : {
-        "id" : "sss",
-        "type" : "ClutterActor"
     },
-    "duration" : 2500,
-    "interval" : {
-        "id" : "enter-interval",
-        "type" : "ClutterInterval",
-        "value-type" : "guint",
-        "initial" : 0,
-        "final" : 255
+    {
+        "id" : "leave-anim",
+        "type" : "ClutterPropertyTransition",
+        "property-name" : "opacity",
+        "animatable" : {
+            "id" : "screen",
+            "type" : "ClutterActor"
+        },
+        "duration" : 500,
+        "interval" : {
+            "id" : "leave-interval",
+            "type" : "ClutterInterval",
+            "value-type" : "guint",
+            "initial" : 255,
+            "final" : 0
+        }
     }
-}
-{
-    "id" : "leave-anim",
-    "type" : "ClutterPropertyTransition",
-    "property-name" : "opacity",
-    "animatable" : {
-        "id" : "sss",
-        "type" : "ClutterActor"
-    },
-    "duration" : 2500,
-    "interval" : {
-        "id" : "leave-interval",
-        "type" : "ClutterInterval",
-        "value-type" : "guint",
-        "initial" : 255,
-        "final" : 0
-    }
-}
+]

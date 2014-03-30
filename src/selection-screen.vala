@@ -53,34 +53,55 @@ class Yamfe.SelectionScreen : Screen ,Input {
     private void previous_item() {
     	if(this._current_selection > 0) {
     		var actor = this._games_list.get_child_at_index(this._current_selection);
-    		actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.BLUE);
+
+            actor.save_easing_state();
+            actor.set_easing_duration(200);
+            actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.BLUE);
+            actor.restore_easing_state();
+    		
     		this._current_selection--;
     		actor = this._games_list.get_child_at_index(this._current_selection);
-    		actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.GREEN);
+
+    		actor.save_easing_state();
+            actor.set_easing_duration(200);
+            actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.GREEN);
+            actor.restore_easing_state();
 
     		float x;
     		float y;
     		actor.get_position(out x, out y);
     		Point p = Point.alloc();
     		p.init(x,(this._games_list.height/-2.0f) + y);
-    		this._games_list.scroll_to_point(p);
+    		this._games_list.save_easing_state();
+            this._games_list.set_easing_duration(500);
+            this._games_list.scroll_to_point(p);
+            this._games_list.restore_easing_state();
     	}
     }
 
     private void next_item() {
     	if(this._current_selection < this._games_list.get_n_children() - 1) {
     		var actor = this._games_list.get_child_at_index(this._current_selection);
-    		actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.BLUE);
+    		actor.save_easing_state();
+            actor.set_easing_duration(200);
+            actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.BLUE);
+            actor.restore_easing_state();
     		this._current_selection++;
     		actor = this._games_list.get_child_at_index(this._current_selection);
-    		actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.GREEN);
+    		actor.save_easing_state();
+            actor.set_easing_duration(200);
+            actor.background_color = Clutter.Color.get_static(Clutter.StaticColor.GREEN);
+            actor.restore_easing_state();
 
     		float x;
     		float y;
     		actor.get_position(out x, out y);
     		Point p = Point.alloc();
     		p.init(x,(this._games_list.height/-2.0f) + y);
+            this._games_list.save_easing_state();
+            this._games_list.set_easing_duration(500);
     		this._games_list.scroll_to_point(p);
+            this._games_list.restore_easing_state();
     	}
     }
 

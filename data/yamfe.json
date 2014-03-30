@@ -4,9 +4,10 @@
         "name" : "stage",
         "type" : "ClutterStage",
         "background-color" : "black",
-        "width" : 1366.0,
-        "height" : 768.0,
+        "width" : 800.0,
+        "height" : 480.0,
         "user-resizable" : false,
+        "fullscreen" : true,
         "children" : [
             {
                 "id" : "splash_screen",
